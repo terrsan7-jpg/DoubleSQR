@@ -1370,11 +1370,11 @@
     .hero-top, .hero-bottom { font-size: 8px; letter-spacing:0.15em; }
     .hero-top .meta-block.center { display: none; }
     /* Hero image strategy on mobile:
-       Full-bleed COVER — image fills the entire viewport, no blur, no letterbox.
-       Crop bias: keep the building (centered/lower-mid in frame) visible by pushing
-       the focal point slightly below center, which trims sky/headroom rather than
-       the structure itself. */
-    .stage-img { object-fit: cover !important; object-position: 50% 60%; }
+       Portrait extension — the source images are extended vertically with
+       their own edge pixels (sky stretched up / ground stretched down) so
+       the whole building shows under cover-fit with continuous, natural
+       surroundings. No padding, no blur, no visible frame. */
+    .stage-img { object-fit: cover !important; object-position: center; }
     /* Use dynamic viewport units so the URL bar doesn't create a gap */
     .hero-sticky{ height:100dvh; min-height:100vh; }
     .stage-backdrop{ display:none !important; }
