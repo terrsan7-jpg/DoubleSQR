@@ -453,11 +453,13 @@
   }
   .services-title em { font-style: italic; }
   .services-aside {
-    font-size: 15px;
+    font-size: 16px;
     color: var(--ink-soft);
-    max-width: 320px;
-    line-height: 1.6;
+    max-width: 420px;
+    line-height: 1.65;
   }
+  .services-aside strong { color: var(--ink); font-weight: 500; }
+  .service-name em { font-style: italic; color: var(--gold); font-weight: inherit; }
 
   .service-list {
     border-top: 1px solid var(--line);
@@ -1387,7 +1389,8 @@
     /* Services */
     .service-item { grid-template-columns: 50px 1fr auto; gap: 16px; padding: 28px 0; }
     .service-name{ font-size:20px !important; line-height:1.15; }
-    .service-desc { display: none; }
+    .service-desc { font-size:13px; line-height:1.55; margin-top:8px; grid-column: 2 / -1; }
+    .service-item { grid-template-columns: 36px 1fr auto !important; row-gap: 4px; }
     .service-num{ font-size:10px; }
 
     /* Stats */
@@ -2609,26 +2612,26 @@ body{ font-optical-sizing: auto; }
   <div class="services-inner">
     <div class="services-header">
       <h2 class="services-title reveal">What we <em>do</em>.</h2>
-      <p class="services-aside reveal reveal-delay-1">Three integrated practices — covering every phase from regulatory submission to final inspection.</p>
+      <p class="services-aside reveal reveal-delay-1"><strong>A UAE engineering consultancy.</strong> We draw the plans, secure the permits, supervise the build, and certify the result — every step handled by one in-house team.</p>
     </div>
 
     <div class="service-list">
       <div class="service-item">
         <div class="service-num">01</div>
-        <div class="service-name">Engineering Design &<br>Authority Coordination</div>
-        <div class="service-desc">Delivering compliant engineering designs with full authority coordination to support efficient approvals and project execution across UAE municipalities.</div>
+        <div class="service-name">Design <em>&amp;</em> Permits</div>
+        <div class="service-desc">Architectural, structural, and MEP drawings — then every approval handled for you. Coordinated with all major UAE authorities until the permit is issued, no chasing required.</div>
         <div class="service-arrow">→</div>
       </div>
       <div class="service-item">
         <div class="service-num">02</div>
-        <div class="service-name">Site Supervision &<br>Engineering Oversight</div>
-        <div class="service-desc">On-site engineering supervision to ensure quality, compliance, and alignment with approved designs throughout the full construction lifecycle.</div>
+        <div class="service-name">Site <em>Supervision</em></div>
+        <div class="service-desc">Engineers on site throughout construction. We verify the build matches the approved drawings, coordinate with contractors, attend inspections, and sign off each milestone.</div>
         <div class="service-arrow">→</div>
       </div>
       <div class="service-item">
         <div class="service-num">03</div>
-        <div class="service-name">Technical Review,<br>Inspections & Compliance</div>
-        <div class="service-desc">Independent technical reviews and inspections to support regulatory compliance and reduce project risks before, during, and after construction.</div>
+        <div class="service-name">Technical <em>Review</em></div>
+        <div class="service-desc">Independent reviews of existing designs, structural assessments, and code-compliance reports — for renovations, property transactions, insurance claims, or legal disputes.</div>
         <div class="service-arrow">→</div>
       </div>
     </div>
@@ -2808,26 +2811,25 @@ body{ font-optical-sizing: auto; }
 <!-- === TAGLINE === -->
 <section class="tagline-section">
   <div class="tagline-inner">
-    <div class="section-label reveal">Philosophy</div>
+    <div class="section-label reveal">How we work</div>
     <h2 class="tagline-text reveal reveal-delay-1">
-      We don't just <em>design</em> —<br>
-      we execute. Every project<br>
-      treated with precision, creativity,<br>
-      and <em>uncompromising</em> craft.
+      One team. <em>Every</em> discipline.<br>
+      From first <em>sketch</em><br>
+      to final stamp.
     </h2>
 
     <div class="tagline-meta">
       <div class="col reveal">
-        <h4>Discipline</h4>
-        Compliant engineering designs delivered with full authority coordination across all major UAE jurisdictions.
+        <h4>In-house</h4>
+        Architectural, structural, MEP, and approvals coordination — all delivered by one team. No outsourcing, no hand-offs, no surprises.
       </div>
       <div class="col reveal reveal-delay-1">
-        <h4>Range</h4>
-        Modern villas, commercial developments, and bespoke interior environments — each tailored to its context.
+        <h4>UAE-wide</h4>
+        Permits secured and projects delivered across all seven emirates — Dubai, Abu Dhabi, Sharjah, Ajman, RAK, UAQ, and Fujairah.
       </div>
       <div class="col reveal reveal-delay-2">
-        <h4>Outcome</h4>
-        Efficient approvals, on-site oversight, and finished work that matches the drawing — line for line.
+        <h4>Proven</h4>
+        12+ years operating in the UAE. 200+ projects delivered. 100+ clients who keep coming back.
       </div>
     </div>
   </div>
