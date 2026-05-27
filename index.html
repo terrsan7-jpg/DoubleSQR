@@ -3144,21 +3144,17 @@ body{ font-optical-sizing: auto; }
     const sketch = document.getElementById('sketch-img');
     const render = document.getElementById('render-img');
     const hero = document.getElementById('hero');
-    if (!backdrop || !hero) return;
-    function setBackdrop(src){ backdrop.style.backgroundImage = `url("${src}")`; }
-    if (sketch && sketch.src) setBackdrop(sketch.src);
-    let usingRender = false;
-    const switchAt = 0.45;
-    window.addEventListener('scroll', () => {
-      const rect = hero.getBoundingClientRect();
-      const total = rect.height - window.innerHeight;
-      const p = Math.max(0, Math.min(1, -rect.top / total));
-      const wantRender = p > switchAt;
-      if (wantRender !== usingRender){
-        usingRender = wantRender;
-        setBackdrop((wantRender ? render?.src : sketch?.src) || sketch?.src);
-      }
-    }, { passive:true });
+    if (!backdrop || !hero || !sketch) return;
+    backdrop.style.backgroundImage = `url("${sketch.src}")`;
+    // Sentinel at 45% down the hero — single IntersectionObserver replaces a
+    // per-scroll getBoundingClientRect() that was forcing layout each tick.
+    const sentinel = document.createElement('div');
+    sentinel.style.cssText = 'position:absolute;top:45%;left:0;width:1px;height:1px;pointer-events:none;';
+    hero.appendChild(sentinel);
+    new IntersectionObserver((entries) => {
+      const above = entries[0].boundingClientRect.top < 0;
+      backdrop.style.backgroundImage = `url("${(above && render?.src) || sketch.src}")`;
+    }).observe(sentinel);
   })();
 
   // ============================================
@@ -3182,7 +3178,7 @@ body{ font-optical-sizing: auto; }
     const scrolled = Math.max(0, -rect.top);
     let progress = Math.min(1, Math.max(0, scrolled / total));
 
-    if (Math.abs(progress - lastProgress) < 0.001) {
+    if (Math.abs(progress - lastProgress) < 0.004) {
       ticking = false;
       return;
     }
@@ -3237,6 +3233,16 @@ body{ font-optical-sizing: auto; }
     const pct = Math.round(eased * 100);
     progressFill.style.width = pct + '%';
     progressPct.textContent = String(pct).padStart(3, '0') + '%';
+
+    // Release compositor layer when animation completes — frees memory for
+    // the rest of the page. Re-apply if user scrolls back up.
+    if (progress >= 1 && sketchImg.style.willChange !== 'auto') {
+      sketchImg.style.willChange = 'auto';
+      renderImg.style.willChange = 'auto';
+    } else if (progress < 1 && sketchImg.style.willChange === 'auto') {
+      sketchImg.style.willChange = 'opacity, clip-path, transform';
+      renderImg.style.willChange = 'clip-path, opacity';
+    }
 
     ticking = false;
   }
@@ -3305,27 +3311,29 @@ body{ font-optical-sizing: auto; }
   // ============================================
   const processTrack = document.getElementById('process-track');
   const processSteps = document.querySelectorAll('.process-step');
-  function updateProcess() {
+  let procTicking = false;
+  function rafUpdateProcess() {
+    procTicking = false;
     if (!processTrack) return;
     const rect = processTrack.getBoundingClientRect();
+    // Early-exit when section is far off-screen — was running forever before.
+    if (rect.bottom < -100 || rect.top > window.innerHeight + 100) return;
     const vh = window.innerHeight;
-    // Progress as section moves through viewport
     const start = vh * 0.7;
     const end = vh * 0.2;
-    const pos = rect.top;
-    let p = (start - pos) / (start - end);
+    let p = (start - rect.top) / (start - end);
     p = Math.min(1, Math.max(0, p));
     processTrack.style.setProperty('--progress', (p * 100) + '%');
-
-    // Activate dots at thresholds
     processSteps.forEach((step, i) => {
-      const threshold = (i + 1) / processSteps.length * 0.85;
-      if (p >= threshold - 0.15) step.classList.add('active');
-      else step.classList.remove('active');
+      const threshold = (i + 1) / processSteps.length * 0.85 - 0.15;
+      step.classList.toggle('active', p >= threshold);
     });
   }
-  window.addEventListener('scroll', updateProcess, { passive: true });
-  updateProcess();
+  function onProcessScroll() {
+    if (!procTicking) { procTicking = true; requestAnimationFrame(rafUpdateProcess); }
+  }
+  window.addEventListener('scroll', onProcessScroll, { passive: true });
+  rafUpdateProcess();
 
   // Smooth scroll for nav links
   document.querySelectorAll('a[href^="#"]').forEach(link => {
@@ -3415,7 +3423,9 @@ body{ font-optical-sizing: auto; }
     const fill = document.getElementById('progress-fill');
     if (!fill) return;
     let shown = false;
+    let dimsTicking = false;
     const check = () => {
+      dimsTicking = false;
       const w = parseFloat(fill.style.width || '0');
       if (w >= 99 && !shown) {
         dims.classList.add('show');
@@ -3425,7 +3435,9 @@ body{ font-optical-sizing: auto; }
         shown = false;
       }
     };
-    window.addEventListener('scroll', check, { passive: true });
+    window.addEventListener('scroll', () => {
+      if (!dimsTicking) { dimsTicking = true; requestAnimationFrame(check); }
+    }, { passive: true });
     check();
   })();
 </script>
